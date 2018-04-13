@@ -18,38 +18,38 @@ Transform::~Transform()
 
 QVector3D Transform::getPosition() const
 {
-    return position;
+	return position;
 }
 
 QVector3D Transform::getScale() const
 {
-    return scale;
+	return scale;
 }
 
 QQuaternion Transform::getRotation() const
 {
-    return rotation;
+	return rotation;
 }
 
 QMatrix4x4 Transform::getCompute()
 {
-    QMatrix4x4 mat;
+	QMatrix4x4 mat;
 
-    mat.scale(scale);
-    mat.rotate(rotation);
-    mat.translate(position);
+	mat.scale(scale);
+	mat.rotate(rotation);
+	mat.translate(position);
 
-    return mat;
+	return mat;
 }
 
 void Transform::setPosition(const QVector3D p){
-    position = p;
+	position = p;
 }
 
 void Transform::setScale(const QVector3D s){
-    scale = s;
+	scale = s;
 }
 
 void Transform::setRotation(const QQuaternion q){
-    rotation = q;
+	rotation = q;
 }

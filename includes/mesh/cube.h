@@ -6,8 +6,8 @@
 class Cube : public Mesh
 {
 public:
-    Cube();
-    ~Cube();
+	Cube();
+	~Cube();
 };
 
 #endif // CUBE_H

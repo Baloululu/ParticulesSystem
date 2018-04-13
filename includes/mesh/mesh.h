@@ -9,27 +9,27 @@
 class Mesh : protected QOpenGLFunctions
 {
 public:
-    Mesh();
-    Mesh(VertexData *v, GLushort *i);
-    ~Mesh();
-    void bind();
+	Mesh();
+	Mesh(VertexData *v, GLushort *i);
+	~Mesh();
+	void bind();
 
-    int getVerticesNumber() const;
-    int getIndicesNumber() const;
+	int getVerticesNumber() const;
+	int getIndicesNumber() const;
 
 protected:
-    void allocate();
+	void allocate();
 
-    VertexData *vertices;
-    int nbVertices;
-    GLushort *indices;
-    int nbIndices;
+	VertexData *vertices;
+	int nbVertices;
+	GLushort *indices;
+	int nbIndices;
 
-    QOpenGLBuffer arrayBuf;
-    QOpenGLBuffer indexBuf;
+	QOpenGLBuffer arrayBuf;
+	QOpenGLBuffer indexBuf;
 
 private:
-    void init();
+	void init();
 };
 
 #endif // MESH_H

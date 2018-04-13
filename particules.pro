@@ -31,7 +31,8 @@ SOURCES += \
     sources/mesh/cube.cpp \
     sources/mesh/mesh.cpp \
     sources/mesh/shape3d.cpp \
-    sources/mesh/transform.cpp
+    sources/mesh/transform.cpp \
+    sources/camera.cpp
 
 HEADERS += \
     includes/geometryengine.h \
@@ -41,11 +42,12 @@ HEADERS += \
     includes/mesh/mesh.h \
     includes/mesh/shape3d.h \
     includes/mesh/struct.h \
-    includes/mesh/transform.h
+    includes/mesh/transform.h \
+    includes/camera.h
 
 FORMS += \
         mainwindow.ui
 
 DISTFILES += \
     fshader.fsh \
-    vshader.vsh \
+    vshader.vsh

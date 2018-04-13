@@ -6,8 +6,8 @@
 
 struct VertexData
 {
-    QVector3D position;
-    QVector3D color;
+	QVector3D position;
+	QVector3D color;
 };
 
 #endif // STRUCT_H

@@ -16,6 +16,7 @@
 #include <math.h>
 #include "mesh/shape3d.h"
 #include "mesh/cube.h"
+#include "camera.h"
 
 #include <QMessageLogger>
 #include <QCoreApplication>
@@ -25,45 +26,44 @@ class GeometryEngine;
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit GLWidget(QWidget *parent = 0);
-    ~GLWidget();
+	explicit GLWidget(QWidget *parent = 0);
+	~GLWidget();
 
 protected:
-    void mousePressEvent(QMouseEvent *e) override;
-    void mouseReleaseEvent(QMouseEvent *e) override;
-    void timerEvent(QTimerEvent *e) override;
+	void mousePressEvent(QMouseEvent *e) override;
+	void mouseReleaseEvent(QMouseEvent *e) override;
+	void timerEvent(QTimerEvent *e) override;
 
-    void initializeGL() override;
-    void resizeGL(int w, int h) override;
-    void paintGL() override;
+	void initializeGL() override;
+	void resizeGL(int w, int h) override;
+	void paintGL() override;
 
-    void initShaders();
-    void initTextures();
+	void keyPressEvent(QKeyEvent *event);
+
+	void initShaders();
+	void initTextures();
 
 private:
-    QBasicTimer timer;
-    QTime fps;
-    QOpenGLShaderProgram program;
-    GeometryEngine *geometries;
+	QBasicTimer timer;
+	QTime fps;
+	QOpenGLShaderProgram program;
+	GeometryEngine *geometries;
 
-    QMatrix4x4 projection;
+	QVector2D mousePressPosition;
+	QVector3D rotationAxis;
+	qreal angularSpeed;
+	QQuaternion rotation;
 
-    QVector2D mousePressPosition;
-    QVector3D rotationAxis;
-    qreal angularSpeed;
-    QQuaternion rotation;
+	Camera camera;
 
-    QVector3D cameraPos, target, cameraDir, up, cameraRight, cameraUp;
-    QMatrix4x4 view;
+	Shape3D *shape;
 
-    Shape3D *shape;
+	int frameCount, lastUpdate;
 
-    int frameCount, lastUpdate;
-
-    QMessageLogger log;
+	QMessageLogger log;
 };
 
 #endif // GLWIDGET_H
