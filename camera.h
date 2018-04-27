@@ -4,6 +4,7 @@
 #include <QVector3D>
 #include <QQuaternion>
 #include <QMatrix4x4>
+#include <QtDebug>
 
 class Camera
 {
@@ -20,10 +21,17 @@ public:
 	void calculateProjection(int w, int h);
 	QMatrix4x4 cameraMatrix() const;
 
+	void setSpeed(const float v);
+	float getSpeed() const;
+
+	QVector3D getUp() const;
+	QVector3D getDir() const;
+
 private:
 	QVector3D position, direction;
-	const QVector3D cameraUp;
+	QVector3D up;
 	QMatrix4x4 projection;
+	float speed;
 };
 
 #endif // CAMERA_H

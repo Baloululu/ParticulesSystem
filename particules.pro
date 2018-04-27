@@ -24,29 +24,29 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-    sources/geometryengine.cpp \
-    sources/glwidget.cpp \
-    sources/main.cpp \
-    sources/mainwindow.cpp \
-    sources/mesh/cube.cpp \
-    sources/mesh/mesh.cpp \
-    sources/mesh/shape3d.cpp \
-    sources/mesh/transform.cpp \
-    sources/camera.cpp
+    mesh/cube.cpp \
+    mesh/mesh.cpp \
+    mesh/shape3d.cpp \
+    mesh/transform.cpp \
+    camera.cpp \
+    geometryengine.cpp \
+    glwidget.cpp \
+    main.cpp \
+    mainwindow.cpp
 
 HEADERS += \
-    includes/geometryengine.h \
-    includes/glwidget.h \
-    includes/mainwindow.h \
-    includes/mesh/cube.h \
-    includes/mesh/mesh.h \
-    includes/mesh/shape3d.h \
-    includes/mesh/struct.h \
-    includes/mesh/transform.h \
-    includes/camera.h
+    mesh/cube.h \
+    mesh/mesh.h \
+    mesh/shape3d.h \
+    mesh/struct.h \
+    mesh/transform.h \
+    camera.h \
+    geometryengine.h \
+    glwidget.h \
+    mainwindow.h
 
 FORMS += \
-        mainwindow.ui
+    mainwindow.ui
 
 DISTFILES += \
     fshader.fsh \

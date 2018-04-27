@@ -18,8 +18,8 @@
 #include "mesh/cube.h"
 #include "camera.h"
 
-#include <QMessageLogger>
 #include <QCoreApplication>
+#include <QSet>
 #include <string>
 
 class GeometryEngine;
@@ -42,6 +42,7 @@ protected:
 	void paintGL() override;
 
 	void keyPressEvent(QKeyEvent *event);
+	void keyReleaseEvent(QKeyEvent *event);
 
 	void initShaders();
 	void initTextures();
@@ -61,9 +62,9 @@ private:
 
 	Shape3D *shape;
 
-	int frameCount, lastUpdate;
+	int lastUpdate;
 
-	QMessageLogger log;
+	QSet<int> keysPressed;
 };
 
 #endif // GLWIDGET_H

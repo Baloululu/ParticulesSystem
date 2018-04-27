@@ -1,4 +1,4 @@
-#include "../../includes/mesh/shape3d.h"
+#include "shape3d.h"
 
 Shape3D::Shape3D() : transform(), mesh(), name()
 {

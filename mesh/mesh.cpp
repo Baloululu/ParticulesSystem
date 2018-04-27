@@ -1,4 +1,4 @@
-#include "../../includes/mesh/mesh.h"
+#include "mesh.h"
 
 Mesh::Mesh() : indexBuf(QOpenGLBuffer::IndexBuffer)
 {

@@ -1,4 +1,4 @@
-#include "../../includes/mesh/cube.h"
+#include "cube.h"
 
 Cube::Cube() : Mesh()
 {
