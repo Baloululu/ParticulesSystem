@@ -22,8 +22,9 @@
 #include <QCoreApplication>
 #include <QSet>
 #include <string>
-#include <QDebug>
 #include <vector>
+#include <QDebug>
+#include <random>
 
 using namespace std;
 
@@ -63,9 +64,12 @@ private:
 	qreal angularSpeed;
 	QQuaternion rotation;
 
+	Billboard* bil;
+	Cube* cube;
+
 	Camera camera;
 
-	vector<Shape3D> shape;
+	vector<Shape3D> shape, bill;
 
 	int lastUpdate;
 

@@ -12,15 +12,16 @@ Mesh::Mesh(vector<VertexData> v, vector<GLushort> i) : indexBuf(QOpenGLBuffer::I
 	this->init();
 }
 
+Mesh::~Mesh()
+{
+	indexBuf.destroy();
+	arrayBuf.destroy();
+}
+
 void Mesh::init(){
 	initializeOpenGLFunctions();
 	indexBuf.create();
 	arrayBuf.create();
-}
-
-Mesh::~Mesh(){
-	indexBuf.destroy();
-	arrayBuf.destroy();
 }
 
 void Mesh::bind(){

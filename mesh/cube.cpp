@@ -30,5 +30,6 @@ Cube::Cube() : Mesh()
 	allocate();
 }
 
-Cube::~Cube(){
+Cube::~Cube()
+{
 }

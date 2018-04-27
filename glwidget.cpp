@@ -16,6 +16,8 @@ GLWidget::~GLWidget()
 	// and the buffers.
 	makeCurrent();
 	delete geometries;
+	delete bil;
+	delete cube;
 	doneCurrent();
 }
 
@@ -101,22 +103,33 @@ void GLWidget::initializeGL()
 
 	initShaders();
 
-	//! [2]
 	// Enable depth buffer
 	glEnable(GL_DEPTH_TEST);
 
 	// Enable back face culling
-//	glEnable(GL_CULL_FACE);
-	glDisable(GL_CULL_FACE);
-	//! [2]
+	glEnable(GL_CULL_FACE);
 
 	geometries = new GeometryEngine;
 
-	QVector3D billPos = QVector3D(0, 0, 8), billScale = QVector3D(1, 1, 1);
+	QVector3D billPos, billScale = QVector3D(1, 1, 1);
 	QQuaternion rot = QQuaternion::fromAxisAndAngle(0, 0, 1, 0);
 
-	shape.push_back( Shape3D("Cube", new Cube(), Transform()) );
-	shape.push_back( Shape3D("Billboard", new Billboard(8), Transform(billPos, billScale, rot)) );
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<> pos(-10, 10);
+	uniform_real_distribution<> col(0.5f, 1.0f);
+
+	bil = new Billboard(8, 0.01, QVector3D(col(gen), col(gen), col(gen)) );
+	cube = new Cube();
+
+	for (int i=0; i < 8000; ++i)
+	{
+		billPos = QVector3D(pos(gen), pos(gen), pos(gen));
+		string nom = "Billboard" + i;
+		bill.push_back( Shape3D(nom, bil, Transform(billPos, billScale, rot)) );
+	}
+
+	shape.push_back( Shape3D("Cube", cube, Transform()) );
 
 	camera.moveTo(0,0,-7);
 
@@ -142,10 +155,6 @@ void GLWidget::initShaders()
 	if (!program.link())
 		close();
 
-	// Bind shader pipeline for use
-	if (!program.bind())
-		close();
-
 	// Compile vertex shader
 	if (!billboard.addShaderFromSourceFile(QOpenGLShader::Vertex, "../ParticulesSystem/vbillboard.vsh"))
 		close();
@@ -157,10 +166,6 @@ void GLWidget::initShaders()
 	// Link shader pipeline
 	if (!billboard.link())
 		close();
-
-	// Bind shader pipeline for use
-	if (!billboard.bind())
-		close();
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -170,21 +175,33 @@ void GLWidget::resizeGL(int w, int h)
 
 void GLWidget::paintGL()
 {
-	if (!program.bind())
-		close();
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	program.setUniformValue("mvp", camera.cameraMatrix());
+	if (shape.size() > 0)
+	{
+		if (!program.bind())
+			close();
 
-	shape[0].draw(&program);
+		program.setUniformValue("mvp", camera.cameraMatrix());
 
-	if (!billboard.bind())
-		close();
+		for (vector<Shape3D>::iterator it = shape.begin(); it != shape.end(); ++it)
+		{
+			it->draw(&program);
+		}
+	}
 
-	billboard.setUniformValue("mvp", camera.cameraMatrix());
-	billboard.setUniformValue("cameraRight", QVector3D::crossProduct(camera.getDir(), camera.getUp()));
-	billboard.setUniformValue("cameraUp", camera.getUp());
+	if (bill.size() > 0)
+	{
+		if (!billboard.bind())
+			close();
 
-	shape[1].draw(&billboard);
+		billboard.setUniformValue("mvp", camera.cameraMatrix());
+		billboard.setUniformValue("cameraRight", QVector3D::crossProduct(camera.getDir(), camera.getUp()));
+		billboard.setUniformValue("cameraUp", camera.getUp());
+
+		for (vector<Shape3D>::iterator it = bill.begin(); it != bill.end(); ++it)
+		{
+			it->draw(&billboard);
+		}
+	}
 }

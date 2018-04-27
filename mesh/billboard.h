@@ -10,12 +10,13 @@ public:
 	Billboard();
 	Billboard(const int n);
 	Billboard(const int n, const float size);
+	Billboard(const int n, const float, const QVector3D color);
 	~Billboard();
 
 	virtual void draw(QOpenGLShaderProgram *program);
 
 private:
-	void generateMesh(const int n, const float size);
+	void generateMesh(const int n, const float size, const QVector3D color);
 };
 
 #endif // BILLBOARD_H

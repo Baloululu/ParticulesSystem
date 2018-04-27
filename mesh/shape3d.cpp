@@ -9,7 +9,7 @@ Shape3D::Shape3D(const Shape3D& s) : transform(s.transform), name(s.name)
 	this->mesh = s.mesh;
 }
 
-Shape3D::Shape3D(char *name, Mesh *m, Transform t) : transform(t), name(name), mesh(m)
+Shape3D::Shape3D(const string n, Mesh *m, const Transform t) : transform(t), name(n), mesh(m)
 {
 }
 

@@ -8,12 +8,16 @@
 #include <QQuaternion>
 #include <QDebug>
 
+#include <string>
+
+using namespace std;
+
 class Shape3D
 {
 public:
 	Shape3D();
 	Shape3D(const Shape3D& s);
-	Shape3D(char *name, Mesh *m, Transform t);
+	Shape3D(const string n, Mesh *m, const Transform t);
 	~Shape3D();
 
 	void draw(QOpenGLShaderProgram *program);
@@ -33,7 +37,7 @@ public:
 private:
 	Transform transform;
 	Mesh* mesh;
-	char* name;
+	string name;
 };
 
 #endif // SHAPE3D_H

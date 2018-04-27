@@ -2,17 +2,22 @@
 
 Billboard::Billboard()
 {
-	generateMesh(4, 1);
+	generateMesh(4, 1, QVector3D(1.0f, 1.0f, 1.0f));
 }
 
 Billboard::Billboard(const int n)
 {
-	generateMesh(n, 1);
+	generateMesh(n, 1, QVector3D(1.0f, 1.0f, 1.0f));
 }
 
 Billboard::Billboard(const int n, const float size)
 {
-	generateMesh(n, size);
+	generateMesh(n, size, QVector3D(1.0f, 1.0f, 1.0f));
+}
+
+Billboard::Billboard(const int n, const float size, const QVector3D color)
+{
+	generateMesh(n, size, color);
 }
 
 Billboard::~Billboard()
@@ -38,7 +43,7 @@ void Billboard::draw(QOpenGLShaderProgram *program)
 	glDrawElements(GL_TRIANGLE_FAN, nbIndices, GL_UNSIGNED_SHORT, 0);
 }
 
-void Billboard::generateMesh(const int n, const float size)
+void Billboard::generateMesh(const int n, const float size, const QVector3D color)
 {
 	nbVertices = n;
 	nbIndices = n;
@@ -53,7 +58,7 @@ void Billboard::generateMesh(const int n, const float size)
 	for(i = 0; i < n; ++i)
 	{
 		float angle = (step * i) + offset;
-		vertices.push_back(VertexData {QVector3D(cos(angle) * size, sin(angle) * size, 0.0f), QVector3D(1.0f, 1.0f, 1.0f)} );
+		vertices.push_back(VertexData {QVector3D(cos(angle) * size, sin(angle) * size, 0.0f), color} );
 		indices.push_back(i);
 	}
 
