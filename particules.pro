@@ -32,7 +32,8 @@ SOURCES += \
     geometryengine.cpp \
     glwidget.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    mesh/billboard.cpp
 
 HEADERS += \
     mesh/cube.h \
@@ -43,11 +44,13 @@ HEADERS += \
     camera.h \
     geometryengine.h \
     glwidget.h \
-    mainwindow.h
+    mainwindow.h \
+    mesh/billboard.h
 
 FORMS += \
     mainwindow.ui
 
 DISTFILES += \
     fshader.fsh \
-    vshader.vsh
+    vshader.vsh \
+    vbillboard.vsh

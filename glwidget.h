@@ -16,11 +16,16 @@
 #include <math.h>
 #include "mesh/shape3d.h"
 #include "mesh/cube.h"
+#include "mesh/billboard.h"
 #include "camera.h"
 
 #include <QCoreApplication>
 #include <QSet>
 #include <string>
+#include <QDebug>
+#include <vector>
+
+using namespace std;
 
 class GeometryEngine;
 
@@ -50,7 +55,7 @@ protected:
 private:
 	QBasicTimer timer;
 	QTime fps;
-	QOpenGLShaderProgram program;
+	QOpenGLShaderProgram program, billboard;
 	GeometryEngine *geometries;
 
 	QVector2D mousePressPosition;
@@ -60,7 +65,7 @@ private:
 
 	Camera camera;
 
-	Shape3D *shape;
+	vector<Shape3D> shape;
 
 	int lastUpdate;
 

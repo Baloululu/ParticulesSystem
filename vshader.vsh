@@ -8,12 +8,9 @@ in vec3 color;
 
 out vec3 fColor;
 
-//! [0]
 void main()
 {
-    // Calculate vertex position in screen space
-    gl_Position = mvp * transform * vec4( position, 1.0 );
+    gl_Position = mvp * transform * vec4(position, 1.0);
 
     fColor = color;
 }
-//! [0]

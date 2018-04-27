@@ -1,7 +1,8 @@
 #include "transform.h"
 
-Transform::Transform() : position(0, 0, 0), scale(1, 1, 1), rotation(0, 0, 1, 0)
+Transform::Transform() : position(0, 0, 0), scale(1, 1, 1), rotation()
 {
+	rotation = QQuaternion::fromAxisAndAngle(0, 0, 1, 0);
 }
 
 Transform::Transform(const Transform& t) : position(t.position), scale(t.scale), rotation(t.rotation)
@@ -34,6 +35,10 @@ QQuaternion Transform::getRotation() const
 QMatrix4x4 Transform::getCompute()
 {
 	QMatrix4x4 mat;
+
+	mat.setToIdentity();
+
+	rotation.normalize();
 
 	mat.scale(scale);
 	mat.rotate(rotation);

@@ -5,14 +5,19 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
+#include <vector>
+
+using namespace std;
 
 class Mesh : protected QOpenGLFunctions
 {
 public:
 	Mesh();
-	Mesh(VertexData *v, GLushort *i);
+	Mesh(vector<VertexData> v, vector<GLushort> i);
 	~Mesh();
 	void bind();
+
+	virtual void draw(QOpenGLShaderProgram *program);
 
 	int getVerticesNumber() const;
 	int getIndicesNumber() const;
@@ -20,9 +25,9 @@ public:
 protected:
 	void allocate();
 
-	VertexData *vertices;
+	vector<VertexData> vertices;
 	int nbVertices;
-	GLushort *indices;
+	vector<GLushort> indices;
 	int nbIndices;
 
 	QOpenGLBuffer arrayBuf;

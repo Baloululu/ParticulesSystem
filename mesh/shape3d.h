@@ -4,9 +4,9 @@
 #include "transform.h"
 #include "mesh.h"
 #include <QOpenGLShaderProgram>
-#include "struct.h"
 #include <QVector3D>
 #include <QQuaternion>
+#include <QDebug>
 
 class Shape3D
 {

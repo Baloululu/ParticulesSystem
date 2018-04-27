@@ -4,7 +4,6 @@
 #include <QVector3D>
 #include <QQuaternion>
 #include <QMatrix4x4>
-#include <QtDebug>
 
 class Camera
 {

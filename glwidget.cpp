@@ -16,7 +16,6 @@ GLWidget::~GLWidget()
 	// and the buffers.
 	makeCurrent();
 	delete geometries;
-	delete shape;
 	doneCurrent();
 }
 
@@ -107,12 +106,17 @@ void GLWidget::initializeGL()
 	glEnable(GL_DEPTH_TEST);
 
 	// Enable back face culling
-	glEnable(GL_CULL_FACE);
+//	glEnable(GL_CULL_FACE);
+	glDisable(GL_CULL_FACE);
 	//! [2]
 
 	geometries = new GeometryEngine;
 
-	shape = new Shape3D("cube", new Cube(), Transform());
+	QVector3D billPos = QVector3D(0, 0, 8), billScale = QVector3D(1, 1, 1);
+	QQuaternion rot = QQuaternion::fromAxisAndAngle(0, 0, 1, 0);
+
+	shape.push_back( Shape3D("Cube", new Cube(), Transform()) );
+	shape.push_back( Shape3D("Billboard", new Billboard(8), Transform(billPos, billScale, rot)) );
 
 	camera.moveTo(0,0,-7);
 
@@ -141,8 +145,23 @@ void GLWidget::initShaders()
 	// Bind shader pipeline for use
 	if (!program.bind())
 		close();
-}
 
+	// Compile vertex shader
+	if (!billboard.addShaderFromSourceFile(QOpenGLShader::Vertex, "../ParticulesSystem/vbillboard.vsh"))
+		close();
+
+	// Compile fragment shader
+	if (!billboard.addShaderFromSourceFile(QOpenGLShader::Fragment, "../ParticulesSystem/fshader.fsh"))
+		close();
+
+	// Link shader pipeline
+	if (!billboard.link())
+		close();
+
+	// Bind shader pipeline for use
+	if (!billboard.bind())
+		close();
+}
 
 void GLWidget::resizeGL(int w, int h)
 {
@@ -151,8 +170,21 @@ void GLWidget::resizeGL(int w, int h)
 
 void GLWidget::paintGL()
 {
+	if (!program.bind())
+		close();
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	program.setUniformValue("mvp", camera.cameraMatrix());
-	shape->draw(&program);
+
+	shape[0].draw(&program);
+
+	if (!billboard.bind())
+		close();
+
+	billboard.setUniformValue("mvp", camera.cameraMatrix());
+	billboard.setUniformValue("cameraRight", QVector3D::crossProduct(camera.getDir(), camera.getUp()));
+	billboard.setUniformValue("cameraUp", camera.getUp());
+
+	shape[1].draw(&billboard);
 }

@@ -43,7 +43,7 @@ void Camera::calculateProjection(int w, int h)
 {
 	qreal aspect = qreal(w) / qreal(h ? h : 1);
 
-	const qreal zNear = 1.0, zFar = 10.0, fov = 100.0;
+	const qreal zNear = 1.0, zFar = 50.0, fov = 45.0;
 
 	projection.setToIdentity();
 

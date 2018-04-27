@@ -69,21 +69,7 @@ Mesh* Shape3D::getMesh() const
 
 void Shape3D::draw(QOpenGLShaderProgram *program)
 {
-	mesh->bind();
-
 	program->setUniformValue("transform", transform.getCompute());
 
-	quintptr offset = 0;
-
-	int vertexLocation = program->attributeLocation("position");
-	program->enableAttributeArray(vertexLocation);
-	program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-
-	offset += sizeof(QVector3D);
-
-	int colorLocation = program->attributeLocation("color");
-	program->enableAttributeArray(colorLocation);
-	program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-
-	glDrawElements(GL_TRIANGLES, mesh->getIndicesNumber(), GL_UNSIGNED_SHORT, 0);
+	mesh->draw(program);
 }

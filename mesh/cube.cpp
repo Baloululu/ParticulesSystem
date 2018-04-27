@@ -5,34 +5,27 @@ Cube::Cube() : Mesh()
 	nbVertices = 8;
 	nbIndices = 36;
 
-	VertexData verticesTemp[] = {
-		{QVector3D(-1.0f, -1.0f, 1.0f), QVector3D(1.0f, 1.0f,1.0f)},
-		{QVector3D(1.0f, -1.0f, 1.0f), QVector3D(1.0f, 1.0f,1.0f)},
-		{QVector3D(-1.0f, 1.0f, 1.0f), QVector3D(1.0f, 1.0f,1.0f)},
-		{QVector3D(1.0f, 1.0f, 1.0f), QVector3D(1.0f, 1.0f,1.0f)},
-		{QVector3D(-1.0f, -1.0f, -1.0f), QVector3D(1.0f, 1.0f,1.0f)},
-		{QVector3D(1.0f, -1.0f, -1.0f), QVector3D(1.0f, 1.0f,1.0f)},
-		{QVector3D(-1.0f, 1.0f, -1.0f), QVector3D(1.0f, 1.0f,1.0f)},
-		{QVector3D(1.0f, 1.0f, -1.0f), QVector3D(1.0f, 1.0f,1.0f)}
-	};
+	vertices.push_back(VertexData {QVector3D(-1.0f, -1.0f, 1.0f), QVector3D(1.0f, 0.0f,0.0f)} );
+	vertices.push_back(VertexData {QVector3D(1.0f, -1.0f, 1.0f), QVector3D(0.0f, 1.0f,0.0f)} );
+	vertices.push_back(VertexData {QVector3D(-1.0f, 1.0f, 1.0f), QVector3D(0.0f, 0.0f,1.0f)} );
+	vertices.push_back(VertexData {QVector3D(1.0f, 1.0f, 1.0f), QVector3D(1.0f, 1.0f,1.0f)} );
+	vertices.push_back(VertexData {QVector3D(-1.0f, -1.0f, -1.0f), QVector3D(1.0f, 1.0f,1.0f)} );
+	vertices.push_back(VertexData {QVector3D(1.0f, -1.0f, -1.0f), QVector3D(1.0f, 0.0f,0.0f)} );
+	vertices.push_back(VertexData {QVector3D(-1.0f, 1.0f, -1.0f), QVector3D(0.0f, 1.0f,0.0f)} );
+	vertices.push_back(VertexData {QVector3D(1.0f, 1.0f, -1.0f), QVector3D(0.0f, 0.0f,1.0f)} );
 
-	GLushort indicesTemp[] = {
-		2,7,6,
-		2,3,7,
-		0,3,2,
-		1,3,0,
-		1,7,3,
-		5,7,1,
-		6,7,5,
-		4,6,5,
-		2,6,4,
-		0,2,4,
-		0,4,5,
-		1,0,5
-	};
-
-	indices = indicesTemp;
-	vertices = verticesTemp;
+	indices.push_back(2); indices.push_back(7); indices.push_back(6);
+	indices.push_back(2); indices.push_back(3); indices.push_back(7);
+	indices.push_back(0); indices.push_back(3); indices.push_back(2);
+	indices.push_back(1); indices.push_back(3); indices.push_back(0);
+	indices.push_back(1); indices.push_back(7); indices.push_back(3);
+	indices.push_back(5); indices.push_back(7); indices.push_back(1);
+	indices.push_back(6); indices.push_back(7); indices.push_back(5);
+	indices.push_back(4); indices.push_back(6); indices.push_back(5);
+	indices.push_back(2); indices.push_back(6); indices.push_back(4);
+	indices.push_back(0); indices.push_back(2); indices.push_back(4);
+	indices.push_back(0); indices.push_back(4); indices.push_back(5);
+	indices.push_back(1); indices.push_back(0); indices.push_back(5);
 
 	allocate();
 }
