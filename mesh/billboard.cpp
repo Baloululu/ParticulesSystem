@@ -41,6 +41,8 @@ void Billboard::draw(QOpenGLShaderProgram *program)
 	program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
 
 	glDrawElements(GL_TRIANGLE_FAN, nbIndices, GL_UNSIGNED_SHORT, 0);
+
+	this->release();
 }
 
 void Billboard::generateMesh(const int n, const float size, const QVector3D color)

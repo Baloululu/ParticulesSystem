@@ -20,7 +20,7 @@ public:
 	Shape3D(const string n, Mesh *m, const Transform t);
 	~Shape3D();
 
-	void draw(QOpenGLShaderProgram *program);
+	virtual void draw(QOpenGLShaderProgram *program);
 
 	void setPosition(const QVector3D p);
 	void setScale(const QVector3D s);
@@ -34,7 +34,7 @@ public:
 	Transform getTransform() const;
 	Mesh* getMesh() const;
 
-private:
+protected:
 	Transform transform;
 	Mesh* mesh;
 	string name;

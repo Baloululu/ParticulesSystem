@@ -17,6 +17,7 @@
 #include "mesh/shape3d.h"
 #include "mesh/cube.h"
 #include "mesh/billboard.h"
+#include "mesh/particules.h"
 #include "camera.h"
 
 #include <QCoreApplication>
@@ -69,9 +70,10 @@ private:
 
 	Camera camera;
 
-	vector<Shape3D> shape, bill;
+	vector<Shape3D> shape;
+	vector<Particules> bill;
 
-	int lastUpdate;
+	int lastUpdate, frameCounter, lastFrameTime;
 
 	QSet<int> keysPressed;
 };

@@ -18,6 +18,7 @@ GLWidget::~GLWidget()
 	delete geometries;
 	delete bil;
 	delete cube;
+
 	doneCurrent();
 }
 
@@ -43,6 +44,7 @@ void GLWidget::timerEvent(QTimerEvent *)
 {
 	float temp = (fps.elapsed() - lastUpdate) / 1000.0;
 	lastUpdate = fps.elapsed();
+
 	if (keysPressed.count() > 0)
 	{
 		QVector3D move = QVector3D(0, 0, 0);
@@ -90,8 +92,17 @@ void GLWidget::timerEvent(QTimerEvent *)
 			camera.rotate(QQuaternion::fromAxisAndAngle(camera.getDir(), temp * roulis * camera.getSpeed()));
 		if(lacet)
 			camera.rotate(QQuaternion::fromAxisAndAngle(camera.getUp(), temp * lacet * camera.getSpeed()));
+	}
+	update();
+	frameCounter++;
 
-		update();
+	float checkSecond = fps.elapsed() - lastFrameTime;
+
+	if (checkSecond > 1000)
+	{
+		qDebug() << checkSecond / float(frameCounter) << "ms/frame or " << float(frameCounter) * 1000 / checkSecond << "fps";
+		frameCounter = 0;
+		lastFrameTime = fps.elapsed();
 	}
 }
 
@@ -99,7 +110,7 @@ void GLWidget::initializeGL()
 {
 	initializeOpenGLFunctions();
 
-	glClearColor(0, 0, 0, 1);
+	glClearColor(0.2, 0.2, 0.2, 1);
 
 	initShaders();
 
@@ -111,33 +122,29 @@ void GLWidget::initializeGL()
 
 	geometries = new GeometryEngine;
 
-	QVector3D billPos, billScale = QVector3D(1, 1, 1);
+	QVector3D billScale = QVector3D(1, 1, 1);
 	QQuaternion rot = QQuaternion::fromAxisAndAngle(0, 0, 1, 0);
 
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_real_distribution<> pos(-10, 10);
 	uniform_real_distribution<> col(0.5f, 1.0f);
 
-	bil = new Billboard(8, 0.01, QVector3D(col(gen), col(gen), col(gen)) );
+	bil = new Billboard(8, 0.005, QVector3D(col(gen), col(gen), col(gen)) );
 	cube = new Cube();
 
-	for (int i=0; i < 8000; ++i)
-	{
-		billPos = QVector3D(pos(gen), pos(gen), pos(gen));
-		string nom = "Billboard" + i;
-		bill.push_back( Shape3D(nom, bil, Transform(billPos, billScale, rot)) );
-	}
+	bill.push_back( Particules("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 500000) );
 
 	shape.push_back( Shape3D("Cube", cube, Transform()) );
 
 	camera.moveTo(0,0,-7);
 
 	lastUpdate = 0;
+	lastFrameTime = 0;
+	frameCounter = 0;
 
 	// Use QBasicTimer because its faster than QTimer
 	timer.start(1000.0/60.0, this);
-	//    timer.start(0, this);
+//	timer.start(0, this);
 	fps.start();
 }
 
@@ -199,7 +206,7 @@ void GLWidget::paintGL()
 		billboard.setUniformValue("cameraRight", QVector3D::crossProduct(camera.getDir(), camera.getUp()));
 		billboard.setUniformValue("cameraUp", camera.getUp());
 
-		for (vector<Shape3D>::iterator it = bill.begin(); it != bill.end(); ++it)
+		for (vector<Particules>::iterator it = bill.begin(); it != bill.end(); ++it)
 		{
 			it->draw(&billboard);
 		}

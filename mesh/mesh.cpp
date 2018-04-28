@@ -3,6 +3,7 @@
 Mesh::Mesh() : indexBuf(QOpenGLBuffer::IndexBuffer)
 {
 	this->init();
+	qDebug() << "MeshInit";
 }
 
 Mesh::Mesh(vector<VertexData> v, vector<GLushort> i) : indexBuf(QOpenGLBuffer::IndexBuffer)
@@ -29,6 +30,12 @@ void Mesh::bind(){
 	arrayBuf.bind();
 }
 
+void Mesh::release()
+{
+	indexBuf.release();
+	arrayBuf.release();
+}
+
 void Mesh::draw(QOpenGLShaderProgram *program)
 {
 	this->bind();
@@ -46,14 +53,15 @@ void Mesh::draw(QOpenGLShaderProgram *program)
 	program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
 
 	glDrawElements(GL_TRIANGLES, nbIndices, GL_UNSIGNED_SHORT, 0);
+
+	this->release();
 }
 
 void Mesh::allocate(){
-	arrayBuf.bind();
+	this->bind();
 	arrayBuf.allocate(vertices.data(), nbVertices * sizeof(VertexData));
-
-	indexBuf.bind();
 	indexBuf.allocate(indices.data(), nbIndices * sizeof(GLushort));
+	this->release();
 }
 
 int Mesh::getVerticesNumber() const

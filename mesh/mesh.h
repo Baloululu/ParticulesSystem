@@ -16,6 +16,7 @@ public:
 	Mesh(vector<VertexData> v, vector<GLushort> i);
 	~Mesh();
 	void bind();
+	void release();
 
 	virtual void draw(QOpenGLShaderProgram *program);
 
