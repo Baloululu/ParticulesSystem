@@ -1,13 +1,13 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
-#include <QVector2D>
 #include <QVector3D>
+#include <QVector4D>
 
 struct VertexData
 {
 	QVector3D position;
-	QVector3D color;
+	QVector4D color;
 };
 
 #endif // STRUCT_H

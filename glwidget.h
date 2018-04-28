@@ -1,8 +1,6 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
-#include "geometryengine.h"
-
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <QMatrix4x4>
@@ -28,8 +26,6 @@
 #include <random>
 
 using namespace std;
-
-class GeometryEngine;
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -58,7 +54,6 @@ private:
 	QBasicTimer timer;
 	QTime fps;
 	QOpenGLShaderProgram program, billboard;
-	GeometryEngine *geometries;
 
 	QVector2D mousePressPosition;
 	QVector3D rotationAxis;

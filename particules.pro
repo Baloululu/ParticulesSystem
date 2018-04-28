@@ -29,7 +29,6 @@ SOURCES += \
     mesh/shape3d.cpp \
     mesh/transform.cpp \
     camera.cpp \
-    geometryengine.cpp \
     glwidget.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -43,7 +42,6 @@ HEADERS += \
     mesh/struct.h \
     mesh/transform.h \
     camera.h \
-    geometryengine.h \
     glwidget.h \
     mainwindow.h \
     mesh/billboard.h \

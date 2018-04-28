@@ -2,7 +2,6 @@
 
 GLWidget::GLWidget(QWidget *parent) :
 	QOpenGLWidget(parent),
-	geometries(0),
 	angularSpeed(0),
 	camera()
 {
@@ -15,7 +14,6 @@ GLWidget::~GLWidget()
 	// Make sure the context is current when deleting the texture
 	// and the buffers.
 	makeCurrent();
-	delete geometries;
 	delete bil;
 	delete cube;
 
@@ -110,7 +108,7 @@ void GLWidget::initializeGL()
 {
 	initializeOpenGLFunctions();
 
-	glClearColor(0.2, 0.2, 0.2, 1);
+	glClearColor(0, 0, 0, 1);
 
 	initShaders();
 
@@ -120,19 +118,20 @@ void GLWidget::initializeGL()
 	// Enable back face culling
 	glEnable(GL_CULL_FACE);
 
-	geometries = new GeometryEngine;
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	QVector3D billScale = QVector3D(1, 1, 1);
 	QQuaternion rot = QQuaternion::fromAxisAndAngle(0, 0, 1, 0);
 
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_real_distribution<> col(0.5f, 1.0f);
+	uniform_real_distribution<> col(0.7f, 1.0f);
 
-	bil = new Billboard(8, 0.005, QVector3D(col(gen), col(gen), col(gen)) );
+	bil = new Billboard(8, 0.01, QVector4D(col(gen), col(gen), col(gen), 0.5f) );
 	cube = new Cube();
 
-	bill.push_back( Particules("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 500000) );
+	bill.push_back( Particules("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 100000) );
 
 	shape.push_back( Shape3D("Cube", cube, Transform()) );
 

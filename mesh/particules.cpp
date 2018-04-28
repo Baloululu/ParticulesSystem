@@ -29,7 +29,7 @@ void Particules::draw(QOpenGLShaderProgram *program)
 
 	int colorLocation = program->attributeLocation("color");
 	program->enableAttributeArray(colorLocation);
-	program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+	program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 4, sizeof(VertexData));
 
 	posBuff.bind();
 

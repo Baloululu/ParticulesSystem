@@ -3,7 +3,6 @@
 Mesh::Mesh() : indexBuf(QOpenGLBuffer::IndexBuffer)
 {
 	this->init();
-	qDebug() << "MeshInit";
 }
 
 Mesh::Mesh(vector<VertexData> v, vector<GLushort> i) : indexBuf(QOpenGLBuffer::IndexBuffer)
@@ -50,7 +49,7 @@ void Mesh::draw(QOpenGLShaderProgram *program)
 
 	int colorLocation = program->attributeLocation("color");
 	program->enableAttributeArray(colorLocation);
-	program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+	program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 4, sizeof(VertexData));
 
 	glDrawElements(GL_TRIANGLES, nbIndices, GL_UNSIGNED_SHORT, 0);
 

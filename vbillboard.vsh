@@ -7,10 +7,10 @@ uniform vec3 cameraRight;
 uniform vec3 cameraUp;
 
 in vec3 position;
-in vec3 color;
+in vec4 color;
 in vec3 loc;
 
-out vec3 fColor;
+out vec4 fColor;
 
 void main()
 {

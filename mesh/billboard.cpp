@@ -2,20 +2,20 @@
 
 Billboard::Billboard()
 {
-	generateMesh(4, 1, QVector3D(1.0f, 1.0f, 1.0f));
+	generateMesh(4, 1, QVector4D(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 Billboard::Billboard(const int n)
 {
-	generateMesh(n, 1, QVector3D(1.0f, 1.0f, 1.0f));
+	generateMesh(n, 1, QVector4D(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 Billboard::Billboard(const int n, const float size)
 {
-	generateMesh(n, size, QVector3D(1.0f, 1.0f, 1.0f));
+	generateMesh(n, size, QVector4D(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
-Billboard::Billboard(const int n, const float size, const QVector3D color)
+Billboard::Billboard(const int n, const float size, const QVector4D color)
 {
 	generateMesh(n, size, color);
 }
@@ -38,14 +38,14 @@ void Billboard::draw(QOpenGLShaderProgram *program)
 
 	int colorLocation = program->attributeLocation("color");
 	program->enableAttributeArray(colorLocation);
-	program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+	program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 4, sizeof(VertexData));
 
 	glDrawElements(GL_TRIANGLE_FAN, nbIndices, GL_UNSIGNED_SHORT, 0);
 
 	this->release();
 }
 
-void Billboard::generateMesh(const int n, const float size, const QVector3D color)
+void Billboard::generateMesh(const int n, const float size, const QVector4D color)
 {
 	nbVertices = n;
 	nbIndices = n;
