@@ -26,6 +26,8 @@ public:
 	QVector3D getUp() const;
 	QVector3D getDir() const;
 
+	QVector3D getPosition() const;
+
 private:
 	QVector3D position, direction;
 	QVector3D up;

@@ -7,6 +7,7 @@
 #include <QVector3D>
 #include <QQuaternion>
 #include <QDebug>
+#include "camera.h"
 
 #include <string>
 
@@ -16,11 +17,11 @@ class Shape3D
 {
 public:
 	Shape3D();
-	Shape3D(const Shape3D& s);
 	Shape3D(const string n, Mesh *m, const Transform t);
 	~Shape3D();
 
-	virtual void draw(QOpenGLShaderProgram *program);
+	void draw(QOpenGLShaderProgram *program);
+	virtual void computeAnimation(const float timePass);
 
 	void setPosition(const QVector3D p);
 	void setScale(const QVector3D s);

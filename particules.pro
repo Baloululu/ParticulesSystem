@@ -33,7 +33,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mesh/billboard.cpp \
-    mesh/particules.cpp
+    mesh/particules.cpp \
+    mesh/deepsorter.cpp
 
 HEADERS += \
     mesh/cube.h \
@@ -45,7 +46,8 @@ HEADERS += \
     glwidget.h \
     mainwindow.h \
     mesh/billboard.h \
-    mesh/particules.h
+    mesh/particules.h \
+    mesh/deepsorter.h
 
 FORMS += \
     mainwindow.ui

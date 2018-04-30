@@ -7,6 +7,8 @@
 #include <QOpenGLShaderProgram>
 #include <vector>
 
+#include <QDebug>
+
 using namespace std;
 
 class Mesh : protected QOpenGLFunctions

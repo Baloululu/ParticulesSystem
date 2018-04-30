@@ -4,11 +4,6 @@ Shape3D::Shape3D() : transform(), mesh(), name()
 {
 }
 
-Shape3D::Shape3D(const Shape3D& s) : transform(s.transform), name(s.name)
-{
-	this->mesh = s.mesh;
-}
-
 Shape3D::Shape3D(const string n, Mesh *m, const Transform t) : transform(t), name(n), mesh(m)
 {
 }
@@ -72,4 +67,8 @@ void Shape3D::draw(QOpenGLShaderProgram *program)
 	program->setUniformValue("transform", transform.getCompute());
 
 	mesh->draw(program);
+}
+
+void Shape3D::computeAnimation(const float timePass)
+{
 }

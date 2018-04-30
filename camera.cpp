@@ -81,3 +81,8 @@ QVector3D Camera::getDir() const
 {
 	return direction;
 }
+
+QVector3D Camera::getPosition() const
+{
+	return position;
+}
