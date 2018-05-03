@@ -45,10 +45,10 @@ void Billboard::draw(QOpenGLShaderProgram *program)
 	this->release();
 }
 
-void Billboard::generateMesh(const int n, const float size, const QVector4D color)
+void Billboard::generateMesh(const int n, const float size, QVector4D color)
 {
-	nbVertices = n;
-	nbIndices = n;
+	nbVertices = n + 1;
+	nbIndices = n + 2;
 
 	float offset = 0, step = (2 * M_PI) / (float) n;
 
@@ -57,12 +57,19 @@ void Billboard::generateMesh(const int n, const float size, const QVector4D colo
 
 	int i;
 
+	vertices.push_back(VertexData {QVector3D(0.0f, 0.0f, 0.0f), color} );
+	indices.push_back(0);
+
+	color.setW(0);
+
 	for(i = 0; i < n; ++i)
 	{
 		float angle = (step * i) + offset;
 		vertices.push_back(VertexData {QVector3D(cos(angle) * size, sin(angle) * size, 0.0f), color} );
-		indices.push_back(i);
+		indices.push_back(i + 1);
 	}
+
+	indices.push_back(1);
 
 	allocate();
 }

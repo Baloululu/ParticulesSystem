@@ -33,8 +33,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mesh/billboard.cpp \
-    mesh/particules.cpp \
-    mesh/deepsorter.cpp
+    mesh/particules.cpp
 
 HEADERS += \
     mesh/cube.h \
@@ -46,8 +45,7 @@ HEADERS += \
     glwidget.h \
     mainwindow.h \
     mesh/billboard.h \
-    mesh/particules.h \
-    mesh/deepsorter.h
+    mesh/particules.h
 
 FORMS += \
     mainwindow.ui
@@ -55,4 +53,5 @@ FORMS += \
 DISTFILES += \
     fshader.fsh \
     vshader.vsh \
-    vbillboard.vsh
+    vbillboard.vsh \
+    compute.vsh

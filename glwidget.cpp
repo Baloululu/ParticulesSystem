@@ -123,6 +123,7 @@ void GLWidget::initializeGL()
 
 	// Enable back face culling
 	glEnable(GL_CULL_FACE);
+//	glDisable(GL_CULL_FACE);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -134,12 +135,14 @@ void GLWidget::initializeGL()
 	mt19937 gen(rd());
 	uniform_real_distribution<> col(0.7f, 1.0f);
 
-	bil = new Billboard(8, 0.03, QVector4D(col(gen), col(gen), col(gen), 0.5f) );
+	bil = new Billboard(8, 0.01, QVector4D(col(gen), col(gen), col(gen), 1.0f) );
 	cube = new Cube();
 
-	bill.push_back( Particules("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 10000) );
+	bill.push_back( Particules("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 100000) );
 
 	shape.push_back( Shape3D("Cube", cube, Transform()) );
+
+//	shape.push_back( Shape3D("Billboard", bil, Transform()) );
 
 	camera.moveTo(0,0,-7);
 
@@ -177,6 +180,9 @@ void GLWidget::initShaders()
 
 	// Link shader pipeline
 	if (!billboard.link())
+		close();
+
+	if (!computeProgramme.addShaderFromSourceFile(QOpenGLShader::Fragment, "../ParticulesSystem/fshader.fsh"))
 		close();
 }
 

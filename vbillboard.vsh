@@ -20,5 +20,8 @@ void main()
 
     gl_Position = mvp * transform * vec4(vertexPosition_worldspace, 1.0);
 
-    fColor = color;
+    if (gl_VertexID == 0)
+        fColor = color;
+    else
+        fColor = vec4(color.r, color.g, color.b, 0);
 }

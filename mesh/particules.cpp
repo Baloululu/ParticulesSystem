@@ -24,7 +24,7 @@ Particules::~Particules()
 
 void Particules::draw(QOpenGLShaderProgram *program, const Camera* cam)
 {
-	sort(part.begin(), part.end(), ParticuleCompare(cam->getPosition()));
+//	sort(part.begin(), part.end(), ParticuleCompare(cam->getPosition()));
 
 	posBuff.bind();
 	auto ptr = posBuff.map(QOpenGLBuffer::WriteOnly);
@@ -101,7 +101,7 @@ void Particules::init()
 	for (int i = 0; i < n; ++i)
 	{
 		QVector3D position = QVector3D(pos(gen), pos(gen), pos(gen));
-		QVector4D color = QVector4D(col(gen), col(gen), col(gen), 0.5f);
+		QVector4D color = QVector4D(col(gen), col(gen), col(gen), 1.0f);
 		QVector3D direction = QVector3D(pos(gen), pos(gen), pos(gen));
 		direction.normalize();
 		part.push_back(Particule{position, color, speed(gen), direction});
@@ -117,9 +117,4 @@ void Particules::createBuffer()
 	posBuff.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 	posBuff.allocate(part.data(), n * sizeof(Particule));
 	posBuff.release();
-}
-
-bool Particules::sortParticule(Particule a, Particule b)
-{
-	return a.position.z() > b.position.z();
 }

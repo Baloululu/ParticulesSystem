@@ -53,7 +53,7 @@ protected:
 private:
 	QBasicTimer timer;
 	QTime fps;
-	QOpenGLShaderProgram program, billboard;
+	QOpenGLShaderProgram program, billboard, computeProgramme;
 
 	QVector2D mousePressPosition;
 	QVector3D rotationAxis;

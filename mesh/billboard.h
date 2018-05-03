@@ -16,7 +16,7 @@ public:
 	virtual void draw(QOpenGLShaderProgram *program);
 
 private:
-	void generateMesh(const int n, const float size, const QVector4D color);
+	void generateMesh(const int n, const float size, QVector4D color);
 };
 
 #endif // BILLBOARD_H

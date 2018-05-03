@@ -10,7 +10,6 @@
 #include "billboard.h"
 #include "struct.h"
 #include <algorithm>
-#include "deepsorter.h"
 
 #include <QDebug>
 
@@ -35,7 +34,6 @@ private:
 	vector<Particule> part;
 	QOpenGLBuffer posBuff;
 	void createBuffer();
-	bool sortParticule(Particule a, Particule b);
 };
 
 #endif // PARTICULES_H
