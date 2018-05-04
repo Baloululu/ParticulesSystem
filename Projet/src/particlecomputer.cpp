@@ -19,7 +19,7 @@ QVector3D acc_from_directional_force(Force f)
 
 inline float dist2_max1(QVector3D a, QVector3D b)
 {
-    return fminf( (a - b).length(), 1.f);
+	return fminf( (a - b).lengthSquared(), 1.f);
 }
 
 CPUParticleComputer::CPUParticleComputer()

@@ -22,9 +22,19 @@ Particules::~Particules()
 	posBuff.destroy();
 }
 
+void Particules::addParticule(Particule &p)
+{
+	this->part.push_back(p);
+}
+
+void Particules::addParticule(vector<Particule> &v)
+{
+	this->part.insert(part.end(), v.begin(), v.end());
+}
+
 void Particules::draw(QOpenGLShaderProgram *program, const Camera* cam)
 {
-//	sort(part.begin(), part.end(), ParticuleCompare(cam->getPosition()));
+	sort(part.begin(), part.end(), ParticuleCompare(cam->getPosition()));
 
 	posBuff.bind();
 	auto ptr = posBuff.map(QOpenGLBuffer::WriteOnly);

@@ -135,12 +135,12 @@ void GLWidget::initializeGL()
 	mt19937 gen(rd());
 	uniform_real_distribution<> col(0.7f, 1.0f);
 
-	bil = new Billboard(8, 0.01, QVector4D(col(gen), col(gen), col(gen), 1.0f) );
+	bil = new Billboard(8, 0.1, QVector4D(col(gen), col(gen), col(gen), 1.0f) );
 	cube = new Cube();
 
-	bill.push_back( Particules("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 100000) );
+	bill.push_back( Particules("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 50000) );
 
-	shape.push_back( Shape3D("Cube", cube, Transform()) );
+//	shape.push_back( Shape3D("Cube", cube, Transform()) );
 
 //	shape.push_back( Shape3D("Billboard", bil, Transform()) );
 
