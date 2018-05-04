@@ -18,6 +18,22 @@ struct Particule
 	QVector3D direction;
 };
 
+enum ForceType {
+	/** (x,y,z): location; mag1: attraction constant (a = Gm/r^2 = mag1/r^2) */
+	ForcePoint,
+
+	/** (x,y,z): direction unit vector; mag1: acceleration
+	i.e. for gravity (x,y,z) = (0,0,-1); mag1 = 9.8 */
+	ForceDirectional,
+};
+
+struct Force{
+
+	QVector3D vect;
+	float value;
+	ForceType type;
+};
+
 struct ParticuleCompare
 {
 	ParticuleCompare(QVector3D camPosition) { this->camera = camPosition; }

@@ -23,6 +23,8 @@ public:
 	Particules(const string id, Mesh *m, const Transform t, const int nbParticules);
 	~Particules();
 
+	void addParticule(Particule &p);
+	void addParticule(vector<Particule> &v);
 	void draw(QOpenGLShaderProgram *program, const Camera* cam);
 	virtual void computeAnimation(const float timePass);
 

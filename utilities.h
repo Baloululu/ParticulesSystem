@@ -1,11 +1,13 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
+#include <QVector3D>
+#include "mesh/struct.h"
 
 class Utilities
 {
 public:
-	Utilities();
+
 };
 
 #endif // UTILITIES_H
