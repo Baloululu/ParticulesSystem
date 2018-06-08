@@ -37,6 +37,7 @@ void Particules::draw(QOpenGLShaderProgram *program, const Camera* cam)
 
 	int vertexLocation = program->attributeLocation("position");
 	int posLocation = program->attributeLocation("pos");
+	int colLocation = program->attributeLocation("color");
 
 	program->enableAttributeArray(vertexLocation);
 	program->setAttributeBuffer(vertexLocation, GL_FLOAT, 0, 3, sizeof(VertexData));
@@ -47,15 +48,20 @@ void Particules::draw(QOpenGLShaderProgram *program, const Camera* cam)
 	glEnableVertexAttribArray(posLocation);
 	glVertexAttribPointer(posLocation, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
 
+	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+	glEnableVertexAttribArray(colLocation);
+	glVertexAttribPointer(colLocation, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
+
 	glVertexAttribDivisor(vertexLocation, 0); // particles vertices : always reuse the same vertices -> 0
 	glVertexAttribDivisor(posLocation, 1); // position : one per particule
+	glVertexAttribDivisor(colLocation, 1); // color : one per particule
 
 	glDrawElementsInstanced(GL_TRIANGLE_FAN, mesh->getIndicesNumber(), GL_UNSIGNED_SHORT, 0, n);
 
 	//reset glVertexAttribDivisor
-	glVertexAttribDivisor(0, 0);
-	glVertexAttribDivisor(1, 0);
-//	glVertexAttribDivisor(2, 0);
+	glVertexAttribDivisor(vertexLocation, 0);
+	glVertexAttribDivisor(posLocation, 0);
+	glVertexAttribDivisor(colLocation, 0);
 
 	mesh->release();
 }
@@ -64,7 +70,9 @@ void Particules::computeAnimation(const float timePass, QOpenGLShaderProgram *co
 {
 	compute->bind();
 	compute->setUniformValue("deltaTimeSec", timePass);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, positionBuffer);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, positionBuffer);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, directionBuffer);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, colorBuffer);
 
 	glUseProgram(compute->programId());
 	glDispatchCompute((n + 127.0)/128.0, 1, 1);
@@ -87,10 +95,8 @@ void Particules::init()
 	{
 		id.push_back(i);
 		QVector4D position = QVector4D(pos(gen), pos(gen), pos(gen), 1);
-//		QVector4D position = QVector4D(i*2, 0, 0, 1);
-//		QVector4D color = QVector4D(col(gen), col(gen), col(gen), 1.0f);
-		QVector4D color = QVector4D(1.0f, 1.0f, 1.0f, 1.0f);
-		QVector3D direction = QVector3D(pos(gen), pos(gen), pos(gen));
+		QVector4D color = QVector4D(col(gen), col(gen), col(gen), 1.0f);
+		QVector4D direction = QVector4D(pos(gen), pos(gen), pos(gen), 0);
 		direction.normalize();
 		part.push_back(Particule{position, color, speed(gen), direction});;
 	}
@@ -100,6 +106,7 @@ void Particules::init()
 
 void Particules::createBuffer()
 {
+	//position buffer
 	glGenBuffers(1, &positionBuffer);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, positionBuffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, n * sizeof(Vec4), NULL, GL_DYNAMIC_DRAW);
@@ -115,6 +122,39 @@ void Particules::createBuffer()
 		pos[i].w = part[i].position.w();
 	}
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
+	//direction buffer
+	glGenBuffers(1, &directionBuffer);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, directionBuffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, n * sizeof(Vec4), NULL, GL_DYNAMIC_DRAW);
+
+	Vec4 *dir = (Vec4 *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, n * sizeof(Vec4), bufMask);
+
+	for (int i = 0; i < n; ++i)
+	{
+		dir[i].x = part[i].direction.x();
+		dir[i].y = part[i].direction.y();
+		dir[i].z = part[i].direction.z();
+		dir[i].w = part[i].direction.w();
+	}
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+	//color buffer
+	glGenBuffers(1, &colorBuffer);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, colorBuffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, n * sizeof(Vec4), NULL, GL_DYNAMIC_DRAW);
+
+	Vec4 *col = (Vec4 *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, n * sizeof(Vec4), bufMask);
+
+	for (int i = 0; i < n; ++i)
+	{
+		col[i].x = part[i].color.x();
+		col[i].y = part[i].color.y();
+		col[i].z = part[i].color.z();
+		col[i].w = part[i].color.w();
+	}
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }

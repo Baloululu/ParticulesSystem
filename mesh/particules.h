@@ -33,7 +33,7 @@ private:
 	int n;
 	vector<Particule> part;
 	vector<int> id;
-	GLuint positionBuffer;
+	GLuint positionBuffer, directionBuffer, colorBuffer;
 	void createBuffer();
 };
 

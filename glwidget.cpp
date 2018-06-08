@@ -171,7 +171,7 @@ void GLWidget::initializeGL()
 	bil = new Billboard(8, 0.01, QVector4D(col(gen), col(gen), col(gen), 1.0f) );
 	cube = new Cube();
 
-	bill.push_back( Particules("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 100000) );
+	bill.push_back( Particules("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 1000000) );
 
 //	shape.push_back( Shape3D("Cube", cube, Transform()) );
 
@@ -184,8 +184,8 @@ void GLWidget::initializeGL()
 	frameCounter = 0;
 
 	// Use QBasicTimer because its faster than QTimer
-//	timer.start(1000.0/60.0, this);
-	timer.start(0, this);
+	timer.start(1000.0/60.0, this);
+//	timer.start(0, this);
 	fps.start();
 }
 

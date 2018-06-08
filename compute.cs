@@ -2,8 +2,16 @@
 
 layout (local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
 
-layout (std140, binding = 1) buffer PositionBuffer{
+layout (std140, binding = 0) buffer PositionBuffer{
 	vec4 postions[];
+};
+
+layout (std140, binding = 1) buffer DirectionBuffer{
+	vec4 directions[];
+};
+
+layout (std140, binding = 2) buffer ColorBuffer{
+	vec4 colors[];
 };
 
 uniform float deltaTimeSec;
@@ -11,18 +19,20 @@ uniform float deltaTimeSec;
 void main()
 {
 	uint index = gl_GlobalInvocationID.x;
-//    Particle p = AllParticles[index];
 
 	vec4 pos = postions[index];
+	vec4 dir = directions[index];
 
-	pos = pos + vec4(0.5 * deltaTimeSec, 0, 0, 0);
+	vec4 temp = pos + (dir * deltaTimeSec);
+
+	if (temp.x > 10 || temp.x < -10)
+		dir.x = -dir.x;
+	if (temp.y > 10 || temp.y < -10)
+		dir.y = -dir.y;
+	if (temp.z > 10 || temp.z < -10)
+		dir.z = -dir.z;
+
+	pos = pos + (dir * deltaTimeSec);
 	postions[index] = pos;
-
-//	p._position = p._position + vec3(0.01,0,0);
-//	p._color = vec4(p._color);
-
-//    vec2 deltaPosition = p._velocity * uDeltaTimeSec;
-//    p._position = p._position + deltaPosition;
-
-//    AllParticles[index] = p;
+	directions[index] = dir;
 }

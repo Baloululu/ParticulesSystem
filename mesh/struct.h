@@ -15,7 +15,7 @@ struct Particule
 	QVector4D position;
 	QVector4D color;
 	float speed;
-	QVector3D direction;
+	QVector4D direction;
 };
 
 struct Vec4
