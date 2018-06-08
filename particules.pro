@@ -54,4 +54,4 @@ DISTFILES += \
     fshader.fsh \
     vshader.vsh \
     vbillboard.vsh \
-    compute.vsh
+    compute.cs

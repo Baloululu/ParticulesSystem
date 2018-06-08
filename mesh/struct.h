@@ -12,17 +12,22 @@ struct VertexData
 
 struct Particule
 {
-	QVector3D position;
+	QVector4D position;
 	QVector4D color;
 	float speed;
 	QVector3D direction;
+};
+
+struct Vec4
+{
+	float x, y, z, w;
 };
 
 struct ParticuleCompare
 {
 	ParticuleCompare(QVector3D camPosition) { this->camera = camPosition; }
 	bool operator () (Particule a, Particule b) {
-		return camera.distanceToPoint(a.position) > camera.distanceToPoint(b.position);
+		return camera.distanceToPoint(a.position.toVector3D()) > camera.distanceToPoint(b.position.toVector3D());
 	}
 
 	QVector3D camera;

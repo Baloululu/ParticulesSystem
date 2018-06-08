@@ -24,7 +24,7 @@ public:
 	~Particules();
 
 	void draw(QOpenGLShaderProgram *program, const Camera* cam);
-	virtual void computeAnimation(const float timePass);
+	virtual void computeAnimation(const float timePass, QOpenGLShaderProgram *compute);
 
 private:
 
@@ -32,7 +32,8 @@ private:
 
 	int n;
 	vector<Particule> part;
-	QOpenGLBuffer posBuff;
+	vector<int> id;
+	GLuint positionBuffer;
 	void createBuffer();
 };
 

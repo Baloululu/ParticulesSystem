@@ -94,7 +94,7 @@ void GLWidget::timerEvent(QTimerEvent *)
 
 	for (vector<Particules>::iterator it = bill.begin(); it != bill.end(); ++it)
 	{
-		it->computeAnimation(temp);
+		it->computeAnimation(temp, &computeProgramme);
 	}
 
 	update();
@@ -108,6 +108,39 @@ void GLWidget::timerEvent(QTimerEvent *)
 		frameCounter = 0;
 		lastFrameTime = fps.elapsed();
 	}
+}
+
+void GLWidget::initShaders()
+{
+	// Compile vertex shader
+	if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, "../ParticulesSystem/vshader.vsh"))
+		close();
+
+	// Compile fragment shader
+	if (!program.addShaderFromSourceFile(QOpenGLShader::Fragment, "../ParticulesSystem/fshader.fsh"))
+		close();
+
+	// Link shader pipeline
+	if (!program.link())
+		close();
+
+	// Compile vertex shader
+	if (!billboard.addShaderFromSourceFile(QOpenGLShader::Vertex, "../ParticulesSystem/vbillboard.vsh"))
+		close();
+
+	// Compile fragment shader
+	if (!billboard.addShaderFromSourceFile(QOpenGLShader::Fragment, "../ParticulesSystem/fshader.fsh"))
+		close();
+
+	// Link shader pipeline
+	if (!billboard.link())
+		close();
+
+	if (!computeProgramme.addShaderFromSourceFile(QOpenGLShader::Compute, "../ParticulesSystem/compute.cs"))
+		close();
+
+	if (!computeProgramme.link())
+		close();
 }
 
 void GLWidget::initializeGL()
@@ -140,7 +173,7 @@ void GLWidget::initializeGL()
 
 	bill.push_back( Particules("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 100000) );
 
-	shape.push_back( Shape3D("Cube", cube, Transform()) );
+//	shape.push_back( Shape3D("Cube", cube, Transform()) );
 
 //	shape.push_back( Shape3D("Billboard", bil, Transform()) );
 
@@ -151,39 +184,9 @@ void GLWidget::initializeGL()
 	frameCounter = 0;
 
 	// Use QBasicTimer because its faster than QTimer
-	timer.start(1000.0/60.0, this);
-//	timer.start(0, this);
+//	timer.start(1000.0/60.0, this);
+	timer.start(0, this);
 	fps.start();
-}
-
-void GLWidget::initShaders()
-{
-	// Compile vertex shader
-	if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, "../ParticulesSystem/vshader.vsh"))
-		close();
-
-	// Compile fragment shader
-	if (!program.addShaderFromSourceFile(QOpenGLShader::Fragment, "../ParticulesSystem/fshader.fsh"))
-		close();
-
-	// Link shader pipeline
-	if (!program.link())
-		close();
-
-	// Compile vertex shader
-	if (!billboard.addShaderFromSourceFile(QOpenGLShader::Vertex, "../ParticulesSystem/vbillboard.vsh"))
-		close();
-
-	// Compile fragment shader
-	if (!billboard.addShaderFromSourceFile(QOpenGLShader::Fragment, "../ParticulesSystem/fshader.fsh"))
-		close();
-
-	// Link shader pipeline
-	if (!billboard.link())
-		close();
-
-	if (!computeProgramme.addShaderFromSourceFile(QOpenGLShader::Fragment, "../ParticulesSystem/fshader.fsh"))
-		close();
 }
 
 void GLWidget::resizeGL(int w, int h)
