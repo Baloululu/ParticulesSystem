@@ -23,11 +23,18 @@ layout (std430, binding = 4) buffer CameBuffer{
 };
 
 uniform float deltaTimeSec;
+uniform float maxLife;
 uniform vec4 cameraPosition;
 
 float lenghtSquare(vec4 vector)
 {
 	return (vector.x * vector.x) + (vector.y * vector.y) + (vector.z * vector.z);
+}
+
+vec4 interpolateColor(vec4 col1, vec4 col2, float actu, float max)
+{
+	float t = actu / max;
+	return (1 - t) * col1 + t * col2;
 }
 
 void main()
@@ -36,29 +43,29 @@ void main()
 
 	life[index] = life[index] - deltaTimeSec;
 
-	if (life[index] > 0)
+	vec4 accel = vec4(0, 0, -9.8, 0);
+	vec4 spe = speed[index] + (accel * deltaTimeSec);
+	vec4 pos = positions[index];
+
+	vec4 temp = pos + (spe * deltaTimeSec);
+	if (temp.z < 0)
 	{
-		vec4 accel = vec4(0, 0, -9.8, 0);
-		vec4 spe = speed[index] + (accel * deltaTimeSec);
-		vec4 pos = positions[index];
-
-		vec4 temp = pos + (spe * deltaTimeSec);
-		if (temp.z < 0)
+		spe.z = -spe.z;
+		spe = spe/2;
+		if (lenghtSquare(spe) < 0.3)
 		{
-			spe.z = -spe.z;
-			spe = spe/2;
-			if (lenghtSquare(spe) < 0.1)
-			{
-				spe = vec4(0);
-			}
+			spe = vec4(0);
 		}
-
-		pos = pos + (spe * deltaTimeSec);
-		speed[index] = spe;
-		positions[index] = pos;
-
-		camera[index] = lenghtSquare(cameraPosition - pos);
 	}
+
+	pos = pos + (spe * deltaTimeSec);
+	speed[index] = spe;
+	positions[index] = pos;
+
+	colors[index] = interpolateColor(vec4(0, 1, 0, 1), vec4(1, 0, 0, 1), maxLife - life[index], maxLife);
+
+	if (life[index] > 0)
+		camera[index] = lenghtSquare(cameraPosition - pos);
 	else
 		camera[index] = -1;
 }

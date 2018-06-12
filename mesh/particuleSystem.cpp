@@ -5,11 +5,9 @@ ParticuleSystem::ParticuleSystem() : Shape3D(), n(10)
 	init();
 }
 
-ParticuleSystem::ParticuleSystem(const ParticuleSystem& p) : Shape3D(p), n(p.n), part(p.part)
+ParticuleSystem::ParticuleSystem(const ParticuleSystem& p) : Shape3D(p), n(p.n)
 {
-	initializeOpenGLFunctions();
-
-	createBuffer();
+	init();
 }
 
 ParticuleSystem::ParticuleSystem(const string id, Mesh *m, const Transform t, const int nbParticules) : Shape3D(id, m, t), n(nbParticules)
@@ -23,14 +21,6 @@ ParticuleSystem::~ParticuleSystem()
 
 void ParticuleSystem::draw(QOpenGLShaderProgram *program, const Camera* cam)
 {
-//	posBuff.bind();
-//	sort(part.begin(), part.end(), ParticuleCompare(cam->getPosition()));
-
-//	auto ptr = posBuff.map(QOpenGLBuffer::WriteOnly);
-//	memcpy(ptr, part.data(), part.size() * sizeof(Particule));
-//	posBuff.unmap();
-//	posBuff.release();
-
 	program->setUniformValue("transform", transform.getCompute());
 
 	mesh->bind();
@@ -38,7 +28,6 @@ void ParticuleSystem::draw(QOpenGLShaderProgram *program, const Camera* cam)
 	int vertexLocation = program->attributeLocation("position");
 	int posLocation = program->attributeLocation("pos");
 	int colLocation = program->attributeLocation("color");
-	int lifeLocation = program->attributeLocation("life");
 
 	program->enableAttributeArray(vertexLocation);
 	program->setAttributeBuffer(vertexLocation, GL_FLOAT, 0, 3, sizeof(VertexData));
@@ -53,22 +42,15 @@ void ParticuleSystem::draw(QOpenGLShaderProgram *program, const Camera* cam)
 	glEnableVertexAttribArray(colLocation);
 	glVertexAttribPointer(colLocation, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, lifeBuffer);
-	glEnableVertexAttribArray(lifeLocation);
-	glVertexAttribPointer(lifeLocation, 1, GL_FLOAT, GL_FALSE, sizeof(float), 0);
-
 	glVertexAttribDivisor(vertexLocation, 0); // particles vertices : always reuse the same vertices -> 0
 	glVertexAttribDivisor(posLocation, 1); // position : one per particule
 	glVertexAttribDivisor(colLocation, 1); // color : one per particule
-	glVertexAttribDivisor(lifeLocation, 1); // life : one per particule
-
 	glDrawElementsInstanced(GL_TRIANGLE_FAN, mesh->getIndicesNumber(), GL_UNSIGNED_SHORT, 0, nbActivePart);
 
 	//reset glVertexAttribDivisor
 	glVertexAttribDivisor(vertexLocation, 0);
 	glVertexAttribDivisor(posLocation, 0);
 	glVertexAttribDivisor(colLocation, 0);
-	glVertexAttribDivisor(lifeLocation, 0);
 
 	mesh->release();
 }
@@ -86,24 +68,9 @@ void ParticuleSystem::computeAnimation(const float timePass, QOpenGLShaderProgra
 void ParticuleSystem::init()
 {
 	initializeOpenGLFunctions();
-	nbActivePart = 0;
-
-//	random_device rd;
-//	mt19937 gen(rd());
-//	uniform_real_distribution<float> pos(-1, 1);
-//	uniform_real_distribution<float> col(0.5, 1);
-//	uniform_real_distribution<float> speed(0, 2);
-//	uniform_real_distribution<float> angle(0, 2 * M_PI);
-//	uniform_real_distribution<float> life(5, 10);
 
 	for (int i = 0; i < n; ++i)
 	{
-//		id.push_back(i);
-//		QVector4D position = QVector4D(0, 0, 0, 1);
-//		QVector4D color = QVector4D(0, 1, 0, 1.0f);
-//		float angle_temps = angle(gen);
-//		QVector4D direction = QVector4D(cos(angle_temps) * speed(gen), sin(angle_temps) * speed(gen), 8, 0);
-//		part.push_back(Particule(position, direction, color, life(gen)));
 		part.push_back(Particule());
 	}
 
@@ -136,26 +103,24 @@ void ParticuleSystem::createBuffer()
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, cameBuffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, n * sizeof(float), NULL, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-
-//	fillVec4Buffer(&positionBuffer, ParticuleAttribute::position);
-//	fillVec4Buffer(&directionBuffer, ParticuleAttribute::direction);
-//	fillVec4Buffer(&colorBuffer, ParticuleAttribute::color);
-//	fillFloatBuffer(&lifeBuffer, ParticuleAttribute::life);
 }
 
 void ParticuleSystem::emitParticules(const float timePass)
 {
-	int nb = (int) (n * timePass)/7.0;
+	int nb = (int) (n * timePass)/(MAX_LIFE + MIN_LIFE);
+
+	if (nbActivePart + nb > n)
+	{
+		qDebug("Maximum de particules atteind : actives : %d, generee : %d", nbActivePart, nb);
+	}
 
 	int i = 0;
 
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_real_distribution<float> pos(-1, 1);
-	uniform_real_distribution<float> col(0.5, 1);
-	uniform_real_distribution<float> speed(0, 2);
-	uniform_real_distribution<float> angle(0, 2 * M_PI);
-	uniform_real_distribution<float> life(5, 10);
+	uniform_real_distribution<float> speed(MIN_SPEED, MAX_SPEED);
+	uniform_real_distribution<float> angle(-RANDOM_ANGLE, RANDOM_ANGLE);
+	uniform_real_distribution<float> life(MIN_LIFE, MAX_LIFE);
 
 	while(nb > 0 && i < n)
 	{
@@ -163,8 +128,15 @@ void ParticuleSystem::emitParticules(const float timePass)
 		{
 			part[i].setVector(ParticuleAttribute::position, QVector4D(0, 0, 0, 1));
 			part[i].setVector(ParticuleAttribute::color, QVector4D(0, 1, 0, 1.0f));
-			float angle_temps = angle(gen);
-			part[i].setVector(ParticuleAttribute::direction, QVector4D(cos(angle_temps) * speed(gen), sin(angle_temps) * speed(gen), 8, 0));
+			QVector3D dir = QVector3D(0, 0, 1);
+			dir = dir * speed(gen);
+
+			QQuaternion rot = QQuaternion::fromAxisAndAngle(1, 0, 0, angle(gen));
+			dir = rot.rotatedVector(dir);
+			rot = QQuaternion::fromAxisAndAngle(0, 1, 0, angle(gen));
+			dir = rot.rotatedVector(dir);
+
+			part[i].setVector(ParticuleAttribute::direction, dir.toVector4D());
 			part[i].setFloat(ParticuleAttribute::life, life(gen));
 			--nb;
 		}
@@ -176,6 +148,7 @@ void ParticuleSystem::physiqueCalculating(const float timePass, QOpenGLShaderPro
 {
 	compute->bind();
 	compute->setUniformValue("deltaTimeSec", timePass);
+	compute->setUniformValue("maxLife", MAX_LIFE);
 	compute->setUniformValue("cameraPosition", cameraPosition);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, positionBuffer);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, directionBuffer);
@@ -192,8 +165,9 @@ void ParticuleSystem::physiqueCalculating(const float timePass, QOpenGLShaderPro
 
 void ParticuleSystem::sort()
 {
-	std::sort(part.begin(), part.end());
 	nbActivePart = 0;
+
+	std::sort(part.begin(), part.end());
 
 	while (nbActivePart < n && part[nbActivePart].getFloat(ParticuleAttribute::life) > 0) {
 		++nbActivePart;

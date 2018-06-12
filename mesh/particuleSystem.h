@@ -15,7 +15,11 @@
 
 #include <QDebug>
 
-#define NB_PARTICULES_EMIT 1000.0
+#define MIN_LIFE 2
+#define MAX_LIFE 3.0f //x.0f important -> flotant envoyé sur le shader
+#define RANDOM_ANGLE 10
+#define MIN_SPEED 6
+#define MAX_SPEED 10
 
 using namespace std;
 

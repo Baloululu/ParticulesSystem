@@ -169,11 +169,11 @@ void GLWidget::initializeGL()
 	mt19937 gen(rd());
 	uniform_real_distribution<> col(0.7f, 1.0f);
 
-	bil = new Billboard(8, 0.01, QVector4D(col(gen), col(gen), col(gen), 1.0f) );
+	bil = new Billboard(8, 0.02, QVector4D(col(gen), col(gen), col(gen), 1.0f) );
 	cube = new Cube();
 	plan = new Plan();
 
-	bill.push_back( ParticuleSystem("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 100000) );
+	bill.push_back( ParticuleSystem("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 50000) );
 
 //	shape.push_back( Shape3D("Cube", cube, Transform()) );
 	shape.push_back( Shape3D("Plan", plan, Transform(QVector3D(0, 0, 0), QVector3D(5, 5, 1), QQuaternion::fromAxisAndAngle(0, 0, 1, 0))) );
