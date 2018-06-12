@@ -33,7 +33,9 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mesh/billboard.cpp \
-    mesh/particules.cpp
+    mesh/particuleSystem.cpp \
+    mesh/particule.cpp \
+    mesh/plan.cpp
 
 HEADERS += \
     mesh/cube.h \
@@ -45,7 +47,9 @@ HEADERS += \
     glwidget.h \
     mainwindow.h \
     mesh/billboard.h \
-    mesh/particules.h
+    mesh/particuleSystem.h \
+    mesh/particule.h \
+    mesh/plan.h
 
 FORMS += \
     mainwindow.ui

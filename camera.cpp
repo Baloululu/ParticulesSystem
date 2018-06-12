@@ -39,6 +39,13 @@ void Camera::rotate(QQuaternion q)
 	up = q.rotatedVector(up);
 }
 
+void Camera::loockAt(QVector3D pos)
+{
+	direction = pos - position;
+	direction.normalize();
+	up = QVector3D::crossProduct(QVector3D(0, 1, 0), direction);
+}
+
 void Camera::calculateProjection(int w, int h)
 {
 	qreal aspect = qreal(w) / qreal(h ? h : 1);

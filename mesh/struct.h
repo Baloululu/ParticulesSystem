@@ -10,12 +10,17 @@ struct VertexData
 	QVector4D color;
 };
 
-struct Particule
+//struct Particule
+//{
+//	QVector4D position;
+//	QVector4D color;
+//	QVector4D direction;
+//	float speed, life;
+//};
+
+enum ParticuleAttribute
 {
-	QVector4D position;
-	QVector4D color;
-	float speed;
-	QVector4D direction;
+	position, direction, color, life, cameraDist
 };
 
 struct Vec4
@@ -23,14 +28,14 @@ struct Vec4
 	float x, y, z, w;
 };
 
-struct ParticuleCompare
-{
-	ParticuleCompare(QVector3D camPosition) { this->camera = camPosition; }
-	bool operator () (Particule a, Particule b) {
-		return camera.distanceToPoint(a.position.toVector3D()) > camera.distanceToPoint(b.position.toVector3D());
-	}
+//struct ParticuleCompare
+//{
+//	ParticuleCompare(QVector3D camPosition) { this->camera = camPosition; }
+//	bool operator () (Particule a, Particule b) {
+//		return camera.distanceToPoint(a.position.toVector3D()) > camera.distanceToPoint(b.position.toVector3D());
+//	}
 
-	QVector3D camera;
-};
+//	QVector3D camera;
+//};
 
 #endif // STRUCT_H

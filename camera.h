@@ -16,6 +16,7 @@ public:
 	void move(QVector3D vect);
 	void move(float x, float y, float z);
 	void rotate(QQuaternion q);
+	void loockAt(QVector3D pos);
 
 	void calculateProjection(int w, int h);
 	QMatrix4x4 cameraMatrix() const;

@@ -16,6 +16,7 @@ GLWidget::~GLWidget()
 	makeCurrent();
 	delete bil;
 	delete cube;
+	delete plan;
 
 	doneCurrent();
 }
@@ -92,9 +93,9 @@ void GLWidget::timerEvent(QTimerEvent *)
 			camera.rotate(QQuaternion::fromAxisAndAngle(camera.getUp(), temp * lacet * camera.getSpeed()));
 	}
 
-	for (vector<Particules>::iterator it = bill.begin(); it != bill.end(); ++it)
+	for (vector<ParticuleSystem>::iterator it = bill.begin(); it != bill.end(); ++it)
 	{
-		it->computeAnimation(temp, &computeProgramme);
+		it->computeAnimation(temp, &computeProgramme, camera.getPosition());
 	}
 
 	update();
@@ -104,7 +105,7 @@ void GLWidget::timerEvent(QTimerEvent *)
 
 	if (checkSecond > 1000)
 	{
-		qDebug() << checkSecond / float(frameCounter) << "ms/frame or " << float(frameCounter) * 1000 / checkSecond << "fps";
+		qDebug() << checkSecond / float(frameCounter) << "ms/frame or" << float(frameCounter) * 1000 / checkSecond << "fps";
 		frameCounter = 0;
 		lastFrameTime = fps.elapsed();
 	}
@@ -147,7 +148,7 @@ void GLWidget::initializeGL()
 {
 	initializeOpenGLFunctions();
 
-	glClearColor(0, 0, 0, 1);
+	glClearColor(0, 0, 0.5, 1);
 
 	initShaders();
 
@@ -170,14 +171,17 @@ void GLWidget::initializeGL()
 
 	bil = new Billboard(8, 0.01, QVector4D(col(gen), col(gen), col(gen), 1.0f) );
 	cube = new Cube();
+	plan = new Plan();
 
-	bill.push_back( Particules("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 1000000) );
+	bill.push_back( ParticuleSystem("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 100000) );
 
 //	shape.push_back( Shape3D("Cube", cube, Transform()) );
+	shape.push_back( Shape3D("Plan", plan, Transform(QVector3D(0, 0, 0), QVector3D(5, 5, 1), QQuaternion::fromAxisAndAngle(0, 0, 1, 0))) );
 
 //	shape.push_back( Shape3D("Billboard", bil, Transform()) );
 
-	camera.moveTo(0,0,-7);
+	camera.moveTo(7,0,7);
+	camera.loockAt(QVector3D(0, 0, 2));
 
 	lastUpdate = 0;
 	lastFrameTime = 0;
@@ -220,7 +224,7 @@ void GLWidget::paintGL()
 		billboard.setUniformValue("cameraRight", QVector3D::crossProduct(camera.getDir(), camera.getUp()));
 		billboard.setUniformValue("cameraUp", camera.getUp());
 
-		for (vector<Particules>::iterator it = bill.begin(); it != bill.end(); ++it)
+		for (vector<ParticuleSystem>::iterator it = bill.begin(); it != bill.end(); ++it)
 		{
 			it->draw(&billboard, &camera);
 		}

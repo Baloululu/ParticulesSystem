@@ -15,8 +15,9 @@
 #include "mesh/shape3d.h"
 #include "mesh/cube.h"
 #include "mesh/billboard.h"
-#include "mesh/particules.h"
+#include "mesh/particuleSystem.h"
 #include "camera.h"
+#include "mesh/plan.h"
 
 #include <QCoreApplication>
 #include <QSet>
@@ -62,11 +63,12 @@ private:
 
 	Billboard* bil;
 	Cube* cube;
+	Plan* plan;
 
 	Camera camera;
 
 	vector<Shape3D> shape;
-	vector<Particules> bill;
+	vector<ParticuleSystem> bill;
 
 	int lastUpdate, frameCounter, lastFrameTime;
 
