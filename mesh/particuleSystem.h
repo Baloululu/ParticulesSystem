@@ -15,11 +15,11 @@
 
 #include <QDebug>
 
-#define MIN_LIFE 2
-#define MAX_LIFE 3.0f //x.0f important -> flotant envoyé sur le shader
+#define MIN_LIFE 3
+#define MAX_LIFE 4.0f //x.0f important -> flotant envoyé sur le shader
 #define RANDOM_ANGLE 10
-#define MIN_SPEED 6
-#define MAX_SPEED 10
+#define MIN_SPEED 3
+#define MAX_SPEED 5
 
 using namespace std;
 
@@ -40,8 +40,7 @@ private:
 
 	int n, nbActivePart;
 	vector<Particule> part;
-	vector<int> id;
-	GLuint positionBuffer, directionBuffer, colorBuffer, speedBuffer, lifeBuffer, cameBuffer;
+	GLuint positionBuffer, directionBuffer, colorBuffer, lifeBuffer, cameBuffer;
 	void createBuffer();
 
 	void emitParticules(const float timePass);

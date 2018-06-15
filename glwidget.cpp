@@ -173,7 +173,7 @@ void GLWidget::initializeGL()
 	cube = new Cube();
 	plan = new Plan();
 
-	bill.push_back( ParticuleSystem("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 50000) );
+	bill.push_back( ParticuleSystem("Particules", bil, Transform(QVector3D(0, 0, 0), billScale, rot), 30000) );
 
 //	shape.push_back( Shape3D("Cube", cube, Transform()) );
 	shape.push_back( Shape3D("Plan", plan, Transform(QVector3D(0, 0, 0), QVector3D(5, 5, 1), QQuaternion::fromAxisAndAngle(0, 0, 1, 0))) );

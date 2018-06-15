@@ -43,7 +43,7 @@ void main()
 
 	life[index] = life[index] - deltaTimeSec;
 
-	vec4 accel = vec4(0, 0, -9.8, 0);
+	vec4 accel = vec4(0, 0, -9.81, 0);
 	vec4 spe = speed[index] + (accel * deltaTimeSec);
 	vec4 pos = positions[index];
 
@@ -62,7 +62,7 @@ void main()
 	speed[index] = spe;
 	positions[index] = pos;
 
-	colors[index] = interpolateColor(vec4(0, 1, 0, 1), vec4(1, 0, 0, 1), maxLife - life[index], maxLife);
+	colors[index] = interpolateColor(vec4(0, 0, 1, 0.5), vec4(0, 0, 1, 0.5), maxLife - life[index], maxLife);
 
 	if (life[index] > 0)
 		camera[index] = lenghtSquare(cameraPosition - pos);

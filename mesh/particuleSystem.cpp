@@ -57,7 +57,6 @@ void ParticuleSystem::draw(QOpenGLShaderProgram *program, const Camera* cam)
 
 void ParticuleSystem::computeAnimation(const float timePass, QOpenGLShaderProgram *compute, const QVector4D cameraPosition)
 {
-//	qDebug("Compute : %d active particules", nbActivePart);
 	readBuffer();
 	emitParticules(timePass);
 	sort();
@@ -126,14 +125,14 @@ void ParticuleSystem::emitParticules(const float timePass)
 	{
 		if (part[i].getFloat(ParticuleAttribute::life) <= 0)
 		{
-			part[i].setVector(ParticuleAttribute::position, QVector4D(0, 0, 0, 1));
+			part[i].setVector(ParticuleAttribute::position, QVector4D(0, 0, 1, 1));
 			part[i].setVector(ParticuleAttribute::color, QVector4D(0, 1, 0, 1.0f));
-			QVector3D dir = QVector3D(0, 0, 1);
+			QVector3D dir = QVector3D(0, 1, 0);
 			dir = dir * speed(gen);
 
-			QQuaternion rot = QQuaternion::fromAxisAndAngle(1, 0, 0, angle(gen));
+			QQuaternion rot = QQuaternion::fromAxisAndAngle(0, 0, 1, angle(gen));
 			dir = rot.rotatedVector(dir);
-			rot = QQuaternion::fromAxisAndAngle(0, 1, 0, angle(gen));
+			rot = QQuaternion::fromAxisAndAngle(1, 0, 0, angle(gen));
 			dir = rot.rotatedVector(dir);
 
 			part[i].setVector(ParticuleAttribute::direction, dir.toVector4D());
